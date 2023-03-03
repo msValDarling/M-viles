@@ -1,36 +1,35 @@
 import 'package:flutter/material.dart';
-import 'package:practica1/screens/dashboard_screen.dart';
-import 'package:practica1/screens/list_task_screen.dart';
-import 'package:practica1/screens/login_screen.dart';
-import 'package:practica1/screens/splash_screens.dart';
-import 'package:practica1/screens/taskScreen.dart';
+import 'package:pmsna/provider/theme_provider.dart';
+import 'package:pmsna/routes.dart';
+import 'package:pmsna/screen/login_screen.dart';
+import 'package:provider/provider.dart';
 
-void main() {
-  runApp(const MyApp());
-}
+void main() => runApp(const MyApp());
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-       
-        primarySwatch: Colors.brown,
-
-        //alfa transparencia
-      ),
-      home: const SplashScreen(),
-      routes: {
-        //alias / asi se definen rutas y son globales
-        '/dash' :(BuildContext) => DashboardScreen(),
-        '/login' :(BuildContext) => LoginScreen(),
-        '/task' :(BuildContext) => ListTaskScreen(),
-        '/add' :(BuildContext) => TaskScreen(),
-      },
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => Theme_provider(context)),
+      ],
+      child: PMSNApp(),
     );
   }
 }
 
+class PMSNApp extends StatelessWidget {
+  const PMSNApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    Theme_provider theme = Provider.of<Theme_provider>(context);
+    return MaterialApp(
+      theme: theme.getthemeData(),
+      routes: getApplicationRoutes(),
+      home: LoginScreen(),
+    );
+  }
+}
