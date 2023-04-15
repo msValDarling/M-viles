@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:pmsna/firebase/email_auth.dart';
 import 'package:pmsna/widgets/loading_modal_widget.dart';
 import 'package:pmsna/responsive.dart';
-import 'package:pmsna/routes.dart';
 import 'package:social_login_buttons/social_login_buttons.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -13,19 +13,27 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   bool isLoading = false;
+// COSO AGREGADO PARA LO DE FIREBASE
+  EmailAuth emailAuth = EmailAuth();
+
+  //controller
+  TextEditingController emailTxt = TextEditingController();
+  TextEditingController passwordTxt = TextEditingController();
 
   final txtEmail = TextFormField(
     decoration: const InputDecoration(
         label: Text('Email User'), border: OutlineInputBorder()),
   );
+
   final txtPass = TextFormField(
     obscureText: true,
     decoration: const InputDecoration(
         label: Text('Password User'), border: OutlineInputBorder()),
   );
   final spaceHorizontal = const SizedBox(
-    height: 7,
+    height: 2,
   );
+
   final btnFacebook = SocialLoginButton(
     buttonType: SocialLoginButtonType.facebook,
     onPressed: () {},
@@ -39,15 +47,15 @@ class _LoginScreenState extends State<LoginScreen> {
     onPressed: () {},
   );
 
-  final imgLogo = Image.asset(
-    'assets/topLince.png',
-    height: 100,
-    width: 50,
-    alignment: Alignment.topCenter,
-  );
-
   @override
   Widget build(BuildContext context) {
+    final imgLogo = Image.asset(
+      'assets/topLince.png',
+      height: 100,
+      width: 50,
+      alignment: Alignment.topCenter,
+    );
+
     final txtRegister = Padding(
       padding: const EdgeInsets.symmetric(vertical: 10),
       child: TextButton(
@@ -57,61 +65,76 @@ class _LoginScreenState extends State<LoginScreen> {
           child: const Text(
             'Crear cuenta',
             style:
-                TextStyle(fontSize: 18, decoration: TextDecoration.underline),
+                TextStyle(fontSize: 15, decoration: TextDecoration.underline),
           )),
     );
 
     final btnEmail = SocialLoginButton(
-      buttonType: SocialLoginButtonType.generalLogin,
-      onPressed: () {
-        isLoading = true;
-        setState(() {});
-        Future.delayed(const Duration(milliseconds: 4000)).then((value) {
+        buttonType: SocialLoginButtonType.generalLogin,
+        onPressed: () {
+          isLoading = true;
+          setState(() {});
+          //Future.delayed(const Duration(milliseconds: 2000)).then((value) {
+          emailAuth
+              .signInWithEmailAndPassword(
+                  email: emailTxt.text, password: passwordTxt.text)
+              .then((value) {
+            if (value) {
+              Navigator.pushNamed(context, '/dash');
+            } else {
+              //AQUI VA EL SNACK BAR de ERROR
+              final snackbar = SnackBar(
+                content: const Text('Revisa los datos ingresados'),
+                action: SnackBarAction(label: 'Undo', onPressed: () {}),
+              );
+              ScaffoldMessenger.of(context).showSnackBar(snackbar);
+            }
+          });
           isLoading = false;
           setState(() {});
-          Navigator.pushNamed(context, '/dash');
         });
-      },
-    );
 
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      body: Stack(
-        children: [
-          Responsive(
-            mobile: MobileLoginScreen(
-                spaceHorizontal: spaceHorizontal,
-                imgLogo: imgLogo,
-                txtEmail: txtEmail,
-                txtPass: txtPass,
-                btnEmail: btnEmail,
-                btnFacebook: btnFacebook,
-                btnGoogle: btnGoogle,
-                btnGithub: btnGithub,
-                txtRegister: txtRegister),
-            tablet: DesktopLoginScreen(
-                spaceHorizontal: spaceHorizontal,
-                imgLogo: imgLogo,
-                txtEmail: txtEmail,
-                txtPass: txtPass,
-                btnEmail: btnEmail,
-                btnFacebook: btnFacebook,
-                btnGoogle: btnGoogle,
-                btnGithub: btnGithub,
-                txtRegister: txtRegister),
-            desktop: DesktopLoginScreen(
-                spaceHorizontal: spaceHorizontal,
-                imgLogo: imgLogo,
-                txtEmail: txtEmail,
-                txtPass: txtPass,
-                btnEmail: btnEmail,
-                btnFacebook: btnFacebook,
-                btnGoogle: btnGoogle,
-                btnGithub: btnGithub,
-                txtRegister: txtRegister),
-          ),
-          isLoading ? const LoadingModalWidget() : Container()
-        ],
+    return Container(
+      alignment: Alignment.center,
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        body: Stack(
+          children: [
+            Responsive(
+              mobile: MobileLoginScreen(
+                  spaceHorizontal: spaceHorizontal,
+                  imgLogo: imgLogo,
+                  txtEmail: txtEmail,
+                  txtPass: txtPass,
+                  btnEmail: btnEmail,
+                  btnFacebook: btnFacebook,
+                  btnGoogle: btnGoogle,
+                  btnGithub: btnGithub,
+                  txtRegister: txtRegister),
+              tablet: DesktopLoginScreen(
+                  spaceHorizontal: spaceHorizontal,
+                  imgLogo: imgLogo,
+                  txtEmail: txtEmail,
+                  txtPass: txtPass,
+                  btnEmail: btnEmail,
+                  btnFacebook: btnFacebook,
+                  btnGoogle: btnGoogle,
+                  btnGithub: btnGithub,
+                  txtRegister: txtRegister),
+              desktop: DesktopLoginScreen(
+                  spaceHorizontal: spaceHorizontal,
+                  imgLogo: imgLogo,
+                  txtEmail: txtEmail,
+                  txtPass: txtPass,
+                  btnEmail: btnEmail,
+                  btnFacebook: btnFacebook,
+                  btnGoogle: btnGoogle,
+                  btnGithub: btnGithub,
+                  txtRegister: txtRegister),
+            ),
+            isLoading ? const LoadingModalWidget() : Container()
+          ],
+        ),
       ),
     );
   }
@@ -144,18 +167,20 @@ class MobileLoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      alignment: Alignment.center,
+      /* width: 100,
+      height: 100, */
       decoration: const BoxDecoration(
           image: DecorationImage(
               opacity: .5,
               fit: BoxFit.cover,
-              image: AssetImage('assets/fondo.jpg'))),
+              image: AssetImage('assets/fondoLince.png'))),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10),
         child: Stack(
           alignment: Alignment.topCenter,
           children: [
             Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-              spaceHorizontal,
               imgLogo,
               spaceHorizontal,
               txtEmail,
@@ -206,11 +231,10 @@ class DesktopLoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      alignment: Alignment.center,
       decoration: const BoxDecoration(
           image: DecorationImage(
-              opacity: .5,
-              fit: BoxFit.cover,
-              image: AssetImage('assets/fondoLince.png'))),
+              fit: BoxFit.cover, image: AssetImage('assets/fondoLince.png'))),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10),
         child: Stack(
@@ -235,13 +259,9 @@ class DesktopLoginScreen extends StatelessWidget {
                       txtPass,
                       spaceHorizontal,
                       btnEmail,
-                      spaceHorizontal,
                       btnFacebook,
-                      spaceHorizontal,
                       btnGoogle,
-                      spaceHorizontal,
                       btnGithub,
-                      spaceHorizontal,
                       txtRegister
                     ])),
               ],

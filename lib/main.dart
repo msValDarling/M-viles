@@ -1,10 +1,18 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:pmsna/provider/theme_provider.dart';
 import 'package:pmsna/routes.dart';
-import 'package:pmsna/screen/login_screen.dart';
 import 'package:provider/provider.dart';
+import 'package:pmsna/screen/onboarding.dart';
 
-void main() => runApp(const MyApp());
+/* principal */
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+//aqui se agrego el const quien sabe pq
+//era recomendacion a ver si sale :c
+  runApp(const MyApp());
+}
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -15,7 +23,7 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => Theme_provider(context)),
       ],
-      child: PMSNApp(),
+      child: const PMSNApp(),
     );
   }
 }
@@ -29,7 +37,8 @@ class PMSNApp extends StatelessWidget {
     return MaterialApp(
       theme: theme.getthemeData(),
       routes: getApplicationRoutes(),
-      home: LoginScreen(),
+      home: //LoginScreen(),
+          const Onboarding(),
     );
   }
 }

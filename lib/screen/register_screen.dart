@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:pmsna/database/database_user_helper.dart';
+import 'package:pmsna/firebase/email_auth.dart';
 import 'package:pmsna/widgets/loading_modal_widget.dart';
 
 TextEditingController txtconNombre = TextEditingController();
@@ -21,6 +22,7 @@ class RegisterScreen extends StatefulWidget {
 class _RegisterScreenState extends State<RegisterScreen> {
   bool isLoading = false;
   File? _image;
+  EmailAuth? emailAuth;
 
   Future<void> _showPickImageDialog() async {
     final ImagePicker _picker = ImagePicker();
@@ -176,6 +178,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
         padding: const EdgeInsets.symmetric(vertical: 15),
         child: ElevatedButton(
             onPressed: () {
+              //AÑADIMOS UN PAR DE LINEAS PARA LA AUTENTIFICACION DE FIREBASE jejeje
+              emailAuth!.createUseeWithEmailAndPassword(
+                  email: txtconCorreo.text, password: txtContrasena.text);
               if (validateData()) Navigator.pushNamed(context, '/dash');
             },
             child: const Text(
@@ -204,9 +209,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
       resizeToAvoidBottomInset: false,
       body: Stack(children: [
         Container(
+          alignment: Alignment.center,
           decoration: const BoxDecoration(
               image: DecorationImage(
                   opacity: .5,
+                  alignment: Alignment.topCenter,
                   fit: BoxFit.cover,
                   image: AssetImage('assets/fondoLince.png'))),
           child: Padding(

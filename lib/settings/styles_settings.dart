@@ -16,4 +16,12 @@ class StyleSettings {
             .colorScheme
             .copyWith(primary: Color.fromARGB(255, 81, 82, 81)));
   }
+
+  static ThemeData temaCalido(BuildContext context) {
+    final theme = ThemeData.light();
+    return theme.copyWith(
+        colorScheme: Theme.of(context)
+            .colorScheme
+            .copyWith(primary: Color.fromARGB(255, 179, 129, 38)));
+  }
 }
