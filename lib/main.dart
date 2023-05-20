@@ -9,13 +9,11 @@ import 'package:pmsna/screen/onboarding.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-//aqui se agrego el const quien sabe pq
-//era recomendacion a ver si sale :c
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +27,7 @@ class MyApp extends StatelessWidget {
 }
 
 class PMSNApp extends StatelessWidget {
-  const PMSNApp({super.key});
+  const PMSNApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -37,8 +35,7 @@ class PMSNApp extends StatelessWidget {
     return MaterialApp(
       theme: theme.getthemeData(),
       routes: getApplicationRoutes(),
-      home: //LoginScreen(),
-          const Onboarding(),
+      home: const Onboarding(),
     );
   }
 }

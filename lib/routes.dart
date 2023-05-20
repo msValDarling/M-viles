@@ -6,7 +6,6 @@ import 'package:pmsna/screen/list_popular_screen.dart';
 import 'package:pmsna/screen/list_post.dart';
 import 'package:pmsna/screen/login_screen.dart';
 import 'package:pmsna/screen/register_screen.dart';
-import 'package:pmsna/screen/splash_screen.dart';
 import 'package:pmsna/screen/onboarding.dart';
 import 'package:pmsna/screen/theme_screen.dart';
 
@@ -14,7 +13,6 @@ Map<String, WidgetBuilder> getApplicationRoutes() {
   return <String, WidgetBuilder>{
     '/register': (BuildContext context) => const RegisterScreen(),
     '/dash': (BuildContext context) => DashboardScreen(),
-    '/splash': (BuildContext context) => SplashScreen(),
     '/login': (BuildContext context) => LoginScreen(),
     '/add': (BuildContext context) => AddPostScreen(),
     '/onboarding': (BuildContext context) => Onboarding(),
